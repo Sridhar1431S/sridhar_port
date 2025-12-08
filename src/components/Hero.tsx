@@ -1,9 +1,25 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowDown, Github, Linkedin, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import profileImage from '@/assets/profile.jpg';
+import { useState, useEffect } from 'react';
+
+const roles = [
+  'Full-Stack Developer',
+  'AI Engineer',
+  'Agentic Software Engineer'
+];
 
 export const Hero = () => {
+  const [currentRoleIndex, setCurrentRoleIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentRoleIndex((prev) => (prev + 1) % roles.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToAbout = () => {
     document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -69,14 +85,25 @@ export const Hero = () => {
               Sridhar Reddy
             </motion.h1>
             
-            <motion.h2
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold gradient-text mb-6"
+              className="h-12 sm:h-14 lg:h-16 mb-6 overflow-hidden"
             >
-              Full-Stack Developer & AI Engineer
-            </motion.h2>
+              <AnimatePresence mode="wait">
+                <motion.h2
+                  key={currentRoleIndex}
+                  initial={{ opacity: 0, y: 40 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -40 }}
+                  transition={{ duration: 0.5, ease: 'easeInOut' }}
+                  className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold gradient-text"
+                >
+                  {roles[currentRoleIndex]}
+                </motion.h2>
+              </AnimatePresence>
+            </motion.div>
             
             <motion.p
               initial={{ opacity: 0, y: 20 }}
