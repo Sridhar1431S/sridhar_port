@@ -3,6 +3,7 @@ import { ArrowDown, Github, Linkedin, Mail, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import profileImage from '@/assets/profile.jpg';
 import { useState, useEffect } from 'react';
+import { ParticleBackground } from './ParticleBackground';
 
 const roles = [
   'Full-Stack Developer',
@@ -26,6 +27,9 @@ export const Hero = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Particle Background */}
+      <ParticleBackground />
+      
       {/* Background Effects */}
       <div className="absolute inset-0 bg-grid opacity-30" />
       <div className="absolute inset-0 bg-gradient-radial" />

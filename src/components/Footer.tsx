@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Heart, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 export const Footer = () => {
   const scrollToTop = () => {
@@ -17,8 +17,7 @@ export const Footer = () => {
             transition={{ duration: 0.5 }}
             className="text-sm text-muted-foreground text-center sm:text-left"
           >
-            © {new Date().getFullYear()} Sridhar Reddy. Built with{' '}
-            <Heart className="inline w-3.5 h-3.5 text-primary mx-0.5" /> using React & Tailwind
+            © {new Date().getFullYear()} Sridhar Reddy. All rights reserved.
           </motion.p>
 
           {/* Back to top */}
