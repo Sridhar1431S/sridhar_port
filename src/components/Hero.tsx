@@ -98,9 +98,10 @@ export const Hero = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -40 }}
                   transition={{ duration: 0.5, ease: 'easeInOut' }}
-                  className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold gradient-text"
+                  className="font-display text-2xl sm:text-3xl lg:text-4xl font-semibold gradient-text flex items-center justify-center lg:justify-start"
                 >
                   {roles[currentRoleIndex]}
+                  <span className="ml-1 w-[3px] h-8 sm:h-10 lg:h-12 bg-primary animate-pulse" />
                 </motion.h2>
               </AnimatePresence>
             </motion.div>
