@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { ExternalLink, Github, Calendar, Sparkles } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useRef, useState } from 'react';
+import { Calendar, Sparkles } from 'lucide-react';
+
+type Category = 'All' | 'AI' | 'Web' | 'Hackathon';
 
 const projects = [
   {
@@ -21,6 +22,7 @@ const projects = [
     technologies: ['OpenAI API', 'Supabase', 'React.js', 'NLP'],
     color: 'from-green-500/20 to-emerald-500/20',
     borderColor: 'hover:border-green-500/50',
+    category: ['AI', 'Hackathon'] as Category[],
   },
   {
     title: 'CV Infinity Boost',
@@ -38,6 +40,7 @@ const projects = [
     technologies: ['LangChain', 'Pinecone', 'FAISS', 'Streamlit', 'LLMs'],
     color: 'from-blue-500/20 to-cyan-500/20',
     borderColor: 'hover:border-blue-500/50',
+    category: ['AI'] as Category[],
   },
   {
     title: 'Digital Literacy Platform',
@@ -55,6 +58,7 @@ const projects = [
     technologies: ['Django', 'React.js', 'REST APIs', 'NLP', 'PostgreSQL'],
     color: 'from-purple-500/20 to-pink-500/20',
     borderColor: 'hover:border-purple-500/50',
+    category: ['Web', 'AI'] as Category[],
   },
   {
     title: 'Learning Platform with Gamification',
@@ -72,12 +76,20 @@ const projects = [
     technologies: ['Django', 'NLP', 'RESTful APIs', 'JavaScript', 'PostgreSQL'],
     color: 'from-orange-500/20 to-red-500/20',
     borderColor: 'hover:border-orange-500/50',
+    category: ['Web', 'Hackathon'] as Category[],
   },
 ];
+
+const categories: Category[] = ['All', 'AI', 'Web', 'Hackathon'];
 
 export const Projects = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
+  const [activeCategory, setActiveCategory] = useState<Category>('All');
+
+  const filteredProjects = activeCategory === 'All' 
+    ? projects 
+    : projects.filter(project => project.category.includes(activeCategory));
 
   return (
     <section id="projects" className="relative section-padding bg-secondary/30">
@@ -92,19 +104,43 @@ export const Projects = () => {
           <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
             Featured <span className="gradient-text">Projects</span>
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto mb-8">
             A selection of projects showcasing my skills in AI, web development, and problem-solving
           </p>
+          
+          {/* Filter Tabs */}
+          <div className="flex flex-wrap justify-center gap-2">
+            {categories.map((category) => (
+              <motion.button
+                key={category}
+                onClick={() => setActiveCategory(category)}
+                className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+                  activeCategory === category
+                    ? 'bg-primary text-primary-foreground shadow-lg'
+                    : 'bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80'
+                }`}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {category}
+              </motion.button>
+            ))}
+          </div>
         </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-          {projects.map((project, index) => (
+        <motion.div 
+          layout
+          className="grid md:grid-cols-2 gap-6 lg:gap-8"
+        >
+          {filteredProjects.map((project, index) => (
             <motion.div
               key={project.title}
-              initial={{ opacity: 0, y: 40 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              layout
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3, delay: index * 0.05 }}
               className={`group glass-card rounded-2xl overflow-hidden ${project.borderColor} transition-all duration-300`}
             >
               {/* Gradient Header */}
@@ -157,7 +193,7 @@ export const Projects = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
