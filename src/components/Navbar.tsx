@@ -17,10 +17,16 @@ export const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
+      
+      // Calculate scroll progress
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setScrollProgress(progress);
       
       // Update active section based on scroll position
       const sections = navLinks.map(link => link.href.slice(1));
@@ -54,6 +60,14 @@ export const Navbar = () => {
         scrolled ? 'glass-card shadow-lg' : 'bg-transparent'
       }`}
     >
+      {/* Scroll Progress Bar */}
+      <motion.div
+        className="absolute top-0 left-0 h-[2px] bg-gradient-to-r from-primary via-accent to-primary"
+        style={{ width: `${scrollProgress}%` }}
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 0.1 }}
+      />
       <nav className="container-custom section-padding !py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
