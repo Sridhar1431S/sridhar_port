@@ -1,73 +1,135 @@
-# Welcome to your Lovable project
+📌 Personal Portfolio – Sridhar Reddy
 
-## Project info
+Welcome to the source code and showcase of my personal portfolio website.
+This portfolio highlights my skills, projects, internships, certifications, and experience as a Computer Science Engineer, Full-Stack Developer, AI/ML Enthusiast, and Data Analyst.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
 
-## How can I edit this code?
 
-There are several ways of editing your application.
+<img width="1799" height="902" alt="Screenshot 2025-12-10 124218" src="https://github.com/user-attachments/assets/9382f4e9-e0cb-478c-9a27-4e56b3c7949b" />
 
-**Use Lovable**
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
 
-Changes made via Lovable will be committed automatically to this repo.
 
-**Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Live Website: https://sridhar-port.vercel.app/
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
-Follow these steps:
+🚀 About the Portfolio
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+This portfolio is designed to present my profile in a clean, modern, and fully responsive layout.
+It includes all essential sections that help recruiters, hiring managers, and collaborators understand my expertise and technical background.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
 
-# Step 3: Install the necessary dependencies.
-npm i
+🧑‍💻 Tech Stack Used
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+Next.js / React.js
+
+Tailwind CSS
+
+HTML5 & CSS3
+
+JavaScript / TypeScript (optional based on site)
+
+Vercel Deployment
+
+Framer Motion (if used for animations)
+
+
+
+📂 Features Included
+🔥 Fully Responsive UI
+
+Works smoothly on desktop, tablet, and mobile devices.
+
+🎨 Clean and Modern Design
+
+Minimalistic portfolio design with smooth animations and a strong visual hierarchy.
+
+
+
+📌 Sections Included
+
+Home / Hero Section
+
+About Me
+
+Skills
+
+Experience & Internships
+
+Projects
+
+Certifications
+
+Contact Section
+
+Social Links Integration
+
+Resume Download
+
+
+📁 Folder Structure (General)
+/public        → Images & static assets  
+/components    → Reusable UI components  
+/pages         → Portfolio pages  
+/styles        → Global styles  
+/utils         → Helper functions (if any)  
+
+
+✨ Highlights of the Portfolio
+
+Showcases real-world internship experience with L&T, Unified Mentor, CollegeTips.in
+
+Features major projects such as:
+
+House Price Prediction
+
+Gamified Learning Platform – SIH
+
+CV Infinity Boost (AI Resume Screener)
+
+Real-Time Fraud Detection
+
+Displays strong skills in:
+
+Python, SQL, JavaScript
+
+React.js, Django, Flask
+
+Machine Learning, NLP
+
+Power BI, Excel
+
+Downloadable resume for easy access
+
+
+📨 Contact
+
+Feel free to connect with me for opportunities, collaborations, or project discussions.
+
+Email: sridhar709398@gmail.com
+
+LinkedIn: https://www.linkedin.com/in/sridhar-reddy-a4779b258
+
+Portfolio: https://sridhar-port.vercel.app/
+
+
+🛠️ Installation & Setup (If adding to GitHub)
+# Clone the repository
+git clone https://github.com/your-username/your-portfolio.git
+
+# Navigate into project folder
+cd your-portfolio
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+✔ Deployment
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+This portfolio is deployed on Vercel for fast hosting and seamless CI/CD.
 
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Deployment link:
+➡ https://sridhar-port.vercel.app
