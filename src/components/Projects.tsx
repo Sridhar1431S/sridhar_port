@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
-import { Calendar, Sparkles } from 'lucide-react';
+import { Calendar, Sparkles, ExternalLink } from 'lucide-react';
 
 type Category = 'All' | 'AI' | 'Web' | 'Hackathon';
 
@@ -23,10 +23,11 @@ const projects = [
     color: 'from-green-500/20 to-emerald-500/20',
     borderColor: 'hover:border-green-500/50',
     category: ['AI', 'Hackathon'] as Category[],
+    link: 'https://agri-grow-nine.vercel.app/',
   },
   {
     title: 'CV Infinity Boost',
-    subtitle: 'AI-Powered Resume Screening System',
+    subtitle: 'Unified Mentor - AI Resume Screening',
     period: 'Apr 2025 – May 2025',
     description:
       'Built an AI-powered resume screening tool using LLMs for semantic search and candidate ranking with an intuitive Streamlit interface.',
@@ -41,6 +42,45 @@ const projects = [
     color: 'from-blue-500/20 to-cyan-500/20',
     borderColor: 'hover:border-blue-500/50',
     category: ['AI'] as Category[],
+    link: 'https://cv-infinity-boost-ai.vercel.app/',
+  },
+  {
+    title: 'Fit Infinity Fuel AI',
+    subtitle: 'Unified Mentor - AI Fitness Platform',
+    period: 'Apr 2025 – May 2025',
+    description:
+      'AI-powered fitness and nutrition platform providing personalized workout plans and dietary recommendations.',
+    features: [
+      'AI-powered recommendations',
+      'Personalized meal plans',
+      'Workout tracking',
+      'Progress analytics',
+      'Health insights',
+    ],
+    technologies: ['React.js', 'AI/ML', 'Supabase', 'Tailwind CSS'],
+    color: 'from-emerald-500/20 to-teal-500/20',
+    borderColor: 'hover:border-emerald-500/50',
+    category: ['AI', 'Web'] as Category[],
+    link: 'https://fit-infinity-fuel-ai.vercel.app/',
+  },
+  {
+    title: 'Pet Friendly City Hub',
+    subtitle: 'CollegeTips.in Internship',
+    period: 'May 2025 – Jun 2025',
+    description:
+      'A platform helping pet owners find pet-friendly locations, services, and communities in their city.',
+    features: [
+      'Location-based search',
+      'Pet services directory',
+      'Community features',
+      'User reviews',
+      'Interactive maps',
+    ],
+    technologies: ['React.js', 'REST APIs', 'Maps API', 'Tailwind CSS'],
+    color: 'from-amber-500/20 to-orange-500/20',
+    borderColor: 'hover:border-amber-500/50',
+    category: ['Web'] as Category[],
+    link: 'https://pet-friendly-city-hub.vercel.app/',
   },
   {
     title: 'Digital Literacy Platform',
@@ -59,6 +99,7 @@ const projects = [
     color: 'from-purple-500/20 to-pink-500/20',
     borderColor: 'hover:border-purple-500/50',
     category: ['Web', 'AI'] as Category[],
+    link: 'https://digital-literacy-virid.vercel.app/',
   },
   {
     title: 'Learning Platform with Gamification',
@@ -180,7 +221,7 @@ export const Projects = () => {
                 </div>
 
                 {/* Technologies */}
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {project.technologies.map((tech) => (
                     <span
                       key={tech}
@@ -190,6 +231,19 @@ export const Projects = () => {
                     </span>
                   ))}
                 </div>
+
+                {/* Project Link */}
+                {'link' in project && project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm text-primary hover:underline transition-colors"
+                  >
+                    <ExternalLink className="w-4 h-4" />
+                    View Live Project
+                  </a>
+                )}
               </div>
             </motion.div>
           ))}
