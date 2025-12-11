@@ -20,6 +20,36 @@ interface ContactEmailRequest {
   subject: string;
   message: string;
   website?: string; // Honeypot field
+  turnstileToken?: string; // Turnstile CAPTCHA token
+}
+
+const TURNSTILE_SECRET_KEY = Deno.env.get("TURNSTILE_SECRET_KEY");
+
+// Verify Turnstile token
+async function verifyTurnstile(token: string, ip: string): Promise<boolean> {
+  if (!TURNSTILE_SECRET_KEY) {
+    console.error("TURNSTILE_SECRET_KEY not configured");
+    return false;
+  }
+
+  try {
+    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        secret: TURNSTILE_SECRET_KEY,
+        response: token,
+        remoteip: ip,
+      }),
+    });
+
+    const result = await response.json();
+    console.log("Turnstile verification result:", result.success);
+    return result.success === true;
+  } catch (error) {
+    console.error("Turnstile verification error:", error);
+    return false;
+  }
 }
 
 // HTML escape function to prevent XSS
@@ -123,6 +153,30 @@ const handler = async (req: Request): Promise<Response> => {
         JSON.stringify({ success: true, message: "Message received" }),
         {
           status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    // Verify Turnstile CAPTCHA token
+    if (!body.turnstileToken) {
+      console.warn(`Missing Turnstile token from IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ error: "Security verification required" }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
+
+    const turnstileValid = await verifyTurnstile(body.turnstileToken, clientIP);
+    if (!turnstileValid) {
+      console.warn(`Turnstile verification failed for IP: ${clientIP}`);
+      return new Response(
+        JSON.stringify({ error: "Security verification failed. Please try again." }),
+        {
+          status: 400,
           headers: { "Content-Type": "application/json", ...corsHeaders },
         }
       );
