@@ -211,6 +211,8 @@ export const Hero = () => {
                   src={profileImage}
                   alt="Sridhar Reddy - Full-Stack Developer"
                   className="w-full h-full object-cover"
+                  width={384}
+                  height={384}
                   fetchPriority="high"
                 />
               </div>
