@@ -38,7 +38,7 @@ const socialLinks = [
   {
     icon: Github,
     label: 'GitHub',
-    href: 'https://github.com/sridhar',
+    href: 'https://github.com/Sridhar1431S/sridhar_port',
   },
 ];
 
