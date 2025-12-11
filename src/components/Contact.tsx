@@ -63,6 +63,19 @@ export const Contact = () => {
     setErrors({});
     
     const formData = new FormData(e.currentTarget);
+    
+    // Check honeypot field - if filled, it's likely a bot
+    const honeypot = formData.get('website') as string;
+    if (honeypot) {
+      // Silently reject but show success to not alert the bot
+      setIsSubmitting(false);
+      toast({
+        title: 'Message sent!',
+        description: 'Thank you for reaching out.',
+      });
+      return;
+    }
+    
     const formValues = {
       name: formData.get('name') as string,
       email: formData.get('email') as string,
@@ -207,6 +220,18 @@ export const Contact = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 lg:p-8 space-y-6">
+              {/* Honeypot field - hidden from users, bots will fill it */}
+              <div className="absolute -left-[9999px]" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
+              
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium mb-2">

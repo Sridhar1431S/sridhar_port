@@ -19,6 +19,7 @@ interface ContactEmailRequest {
   email: string;
   subject: string;
   message: string;
+  website?: string; // Honeypot field
 }
 
 // HTML escape function to prevent XSS
@@ -113,6 +114,19 @@ const handler = async (req: Request): Promise<Response> => {
 
   try {
     const body: ContactEmailRequest = await req.json();
+    
+    // Honeypot check - if the hidden field is filled, it's likely a bot
+    if (body.website && body.website.trim().length > 0) {
+      console.warn(`Honeypot triggered from IP: ${clientIP}`);
+      // Return success to not alert the bot, but don't send email
+      return new Response(
+        JSON.stringify({ success: true, message: "Message received" }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
     
     // Server-side validation
     const validation = validateInput(body);
