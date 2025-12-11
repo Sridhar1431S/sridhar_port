@@ -7,6 +7,15 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { z } from 'zod';
+
+// Validation schema
+const contactSchema = z.object({
+  name: z.string().trim().min(1, 'Name is required').max(100, 'Name must be less than 100 characters'),
+  email: z.string().trim().email('Please enter a valid email').max(255, 'Email must be less than 255 characters'),
+  subject: z.string().trim().min(1, 'Subject is required').max(200, 'Subject must be less than 200 characters'),
+  message: z.string().trim().min(1, 'Message is required').max(5000, 'Message must be less than 5000 characters'),
+});
 
 const contactInfo = [
   {
@@ -46,20 +55,43 @@ export const Contact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: '-100px' });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setErrors({});
     
     const formData = new FormData(e.currentTarget);
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const subject = formData.get('subject') as string;
-    const message = formData.get('message') as string;
+    const formValues = {
+      name: formData.get('name') as string,
+      email: formData.get('email') as string,
+      subject: formData.get('subject') as string,
+      message: formData.get('message') as string,
+    };
+
+    // Client-side validation
+    const validation = contactSchema.safeParse(formValues);
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as string] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      setIsSubmitting(false);
+      toast({
+        title: 'Validation Error',
+        description: 'Please check the form fields and try again.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     try {
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: { name, email, subject, message },
+        body: validation.data,
       });
 
       if (error) throw error;
@@ -71,10 +103,9 @@ export const Contact = () => {
       
       (e.target as HTMLFormElement).reset();
     } catch (error: any) {
-      console.error('Error sending message:', error);
       toast({
         title: 'Error sending message',
-        description: 'Please try again or contact me directly via email.',
+        description: error.message || 'Please try again or contact me directly via email.',
         variant: 'destructive',
       });
     } finally {
@@ -185,9 +216,11 @@ export const Contact = () => {
                     id="name"
                     name="name"
                     placeholder="Your name"
+                    maxLength={100}
                     required
-                    className="bg-background/50"
+                    className={`bg-background/50 ${errors.name ? 'border-destructive' : ''}`}
                   />
+                  {errors.name && <p className="text-destructive text-xs mt-1">{errors.name}</p>}
                 </div>
                 <div>
                   <label htmlFor="email" className="block text-sm font-medium mb-2">
@@ -198,9 +231,11 @@ export const Contact = () => {
                     name="email"
                     type="email"
                     placeholder="your@email.com"
+                    maxLength={255}
                     required
-                    className="bg-background/50"
+                    className={`bg-background/50 ${errors.email ? 'border-destructive' : ''}`}
                   />
+                  {errors.email && <p className="text-destructive text-xs mt-1">{errors.email}</p>}
                 </div>
               </div>
 
@@ -212,9 +247,11 @@ export const Contact = () => {
                   id="subject"
                   name="subject"
                   placeholder="What's this about?"
+                  maxLength={200}
                   required
-                  className="bg-background/50"
+                  className={`bg-background/50 ${errors.subject ? 'border-destructive' : ''}`}
                 />
+                {errors.subject && <p className="text-destructive text-xs mt-1">{errors.subject}</p>}
               </div>
 
               <div>
@@ -226,9 +263,11 @@ export const Contact = () => {
                   name="message"
                   placeholder="Your message..."
                   rows={5}
+                  maxLength={5000}
                   required
-                  className="bg-background/50 resize-none"
+                  className={`bg-background/50 resize-none ${errors.message ? 'border-destructive' : ''}`}
                 />
+                {errors.message && <p className="text-destructive text-xs mt-1">{errors.message}</p>}
               </div>
 
               <Button type="submit" size="lg" className="w-full gap-2" disabled={isSubmitting}>
