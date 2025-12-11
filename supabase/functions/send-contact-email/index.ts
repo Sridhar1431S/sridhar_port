@@ -9,11 +9,76 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
+// Simple in-memory rate limiting (resets on function restart)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT = 5; // Max requests per window
+const RATE_WINDOW = 60 * 60 * 1000; // 1 hour in milliseconds
+
 interface ContactEmailRequest {
   name: string;
   email: string;
   subject: string;
   message: string;
+}
+
+// HTML escape function to prevent XSS
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+// Validation function
+function validateInput(data: ContactEmailRequest): { valid: boolean; error?: string } {
+  const { name, email, subject, message } = data;
+
+  // Check required fields
+  if (!name || !email || !subject || !message) {
+    return { valid: false, error: "All fields are required" };
+  }
+
+  // Validate lengths
+  if (typeof name !== 'string' || name.trim().length === 0 || name.length > 100) {
+    return { valid: false, error: "Name must be between 1 and 100 characters" };
+  }
+  if (typeof email !== 'string' || email.length > 255) {
+    return { valid: false, error: "Email must be less than 255 characters" };
+  }
+  if (typeof subject !== 'string' || subject.trim().length === 0 || subject.length > 200) {
+    return { valid: false, error: "Subject must be between 1 and 200 characters" };
+  }
+  if (typeof message !== 'string' || message.trim().length === 0 || message.length > 5000) {
+    return { valid: false, error: "Message must be between 1 and 5000 characters" };
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return { valid: false, error: "Invalid email format" };
+  }
+
+  return { valid: true };
+}
+
+// Check rate limit
+function checkRateLimit(ip: string): { allowed: boolean; remaining: number } {
+  const now = Date.now();
+  const record = rateLimitMap.get(ip);
+
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(ip, { count: 1, resetTime: now + RATE_WINDOW });
+    return { allowed: true, remaining: RATE_LIMIT - 1 };
+  }
+
+  if (record.count >= RATE_LIMIT) {
+    return { allowed: false, remaining: 0 };
+  }
+
+  record.count++;
+  return { allowed: true, remaining: RATE_LIMIT - record.count };
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -24,23 +89,51 @@ const handler = async (req: Request): Promise<Response> => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    const { name, email, subject, message }: ContactEmailRequest = await req.json();
-    
-    console.log(`Processing contact form from: ${name} (${email})`);
-    console.log(`Subject: ${subject}`);
+  // Get client IP for rate limiting
+  const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || 
+                   req.headers.get("x-real-ip") || 
+                   "unknown";
 
-    // Validate inputs
-    if (!name || !email || !subject || !message) {
-      console.error("Missing required fields");
+  // Check rate limit
+  const rateLimit = checkRateLimit(clientIP);
+  if (!rateLimit.allowed) {
+    console.warn(`Rate limit exceeded for IP: ${clientIP}`);
+    return new Response(
+      JSON.stringify({ error: "Too many requests. Please try again later." }),
+      {
+        status: 429,
+        headers: { 
+          "Content-Type": "application/json", 
+          "X-RateLimit-Remaining": "0",
+          ...corsHeaders 
+        },
+      }
+    );
+  }
+
+  try {
+    const body: ContactEmailRequest = await req.json();
+    
+    // Server-side validation
+    const validation = validateInput(body);
+    if (!validation.valid) {
+      console.error("Validation failed:", validation.error);
       return new Response(
-        JSON.stringify({ error: "All fields are required" }),
+        JSON.stringify({ error: validation.error }),
         {
           status: 400,
           headers: { "Content-Type": "application/json", ...corsHeaders },
         }
       );
     }
+
+    // Sanitize inputs for HTML email
+    const name = escapeHtml(body.name.trim());
+    const email = escapeHtml(body.email.trim());
+    const subject = escapeHtml(body.subject.trim());
+    const message = escapeHtml(body.message.trim());
+    
+    console.log(`Processing contact form from: ${name}`);
 
     // Send notification email to the portfolio owner
     const notificationEmail = await resend.emails.send({
@@ -62,7 +155,7 @@ const handler = async (req: Request): Promise<Response> => {
             
             <div style="margin-bottom: 20px;">
               <p style="color: #00d4ff; font-size: 12px; text-transform: uppercase; margin: 0 0 4px 0;">Email</p>
-              <p style="color: #fff; font-size: 16px; margin: 0;"><a href="mailto:${email}" style="color: #00d4ff; text-decoration: none;">${email}</a></p>
+              <p style="color: #fff; font-size: 16px; margin: 0;"><a href="mailto:${body.email.trim()}" style="color: #00d4ff; text-decoration: none;">${email}</a></p>
             </div>
             
             <div style="margin-bottom: 20px;">
@@ -77,7 +170,7 @@ const handler = async (req: Request): Promise<Response> => {
           </div>
           
           <div style="text-align: center; margin-top: 30px;">
-            <a href="mailto:${email}" style="display: inline-block; background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%); color: #000; padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: 600;">Reply to ${name}</a>
+            <a href="mailto:${body.email.trim()}" style="display: inline-block; background: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%); color: #000; padding: 12px 32px; border-radius: 8px; text-decoration: none; font-weight: 600;">Reply to ${name}</a>
           </div>
         </div>
       `,
@@ -88,7 +181,7 @@ const handler = async (req: Request): Promise<Response> => {
     // Send confirmation email to the sender
     const confirmationEmail = await resend.emails.send({
       from: "Sridhar Reddy <onboarding@resend.dev>",
-      to: [email],
+      to: [body.email.trim()],
       subject: "Thank you for reaching out!",
       html: `
         <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%); padding: 40px; border-radius: 16px;">
@@ -128,13 +221,17 @@ const handler = async (req: Request): Promise<Response> => {
       JSON.stringify({ success: true, message: "Emails sent successfully" }),
       {
         status: 200,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        headers: { 
+          "Content-Type": "application/json", 
+          "X-RateLimit-Remaining": rateLimit.remaining.toString(),
+          ...corsHeaders 
+        },
       }
     );
   } catch (error: any) {
     console.error("Error in send-contact-email function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: "An error occurred. Please try again." }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },
