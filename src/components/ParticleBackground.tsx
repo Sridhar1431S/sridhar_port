@@ -14,6 +14,7 @@ export const ParticleBackground = () => {
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number>();
   const mouseRef = useRef({ x: 0, y: 0 });
+  const lastFrameTimeRef = useRef<number>(0);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -22,31 +23,49 @@ export const ParticleBackground = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // Throttle to ~30fps for performance
+    const targetFPS = 30;
+    const frameInterval = 1000 / targetFPS;
+
     const resizeCanvas = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
 
     const createParticles = () => {
-      const particleCount = Math.floor((window.innerWidth * window.innerHeight) / 15000);
+      // Reduced particle count for better performance
+      const particleCount = Math.min(30, Math.floor((window.innerWidth * window.innerHeight) / 40000));
       particlesRef.current = [];
       
       for (let i = 0; i < particleCount; i++) {
         particlesRef.current.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
           size: Math.random() * 2 + 1,
           opacity: Math.random() * 0.5 + 0.2,
         });
       }
     };
 
-    const drawParticles = () => {
+    const drawParticles = (timestamp: number) => {
+      // Throttle frame rate
+      const elapsed = timestamp - lastFrameTimeRef.current;
+      if (elapsed < frameInterval) {
+        animationFrameRef.current = requestAnimationFrame(drawParticles);
+        return;
+      }
+      lastFrameTimeRef.current = timestamp - (elapsed % frameInterval);
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      particlesRef.current.forEach((particle, i) => {
+      const particles = particlesRef.current;
+      const len = particles.length;
+
+      for (let i = 0; i < len; i++) {
+        const particle = particles[i];
+        
         // Update position
         particle.x += particle.vx;
         particle.y += particle.vy;
@@ -61,33 +80,37 @@ export const ParticleBackground = () => {
         ctx.fillStyle = `rgba(0, 212, 255, ${particle.opacity})`;
         ctx.fill();
 
-        // Draw connections
-        particlesRef.current.slice(i + 1).forEach((otherParticle) => {
+        // Draw connections (limited range for performance)
+        for (let j = i + 1; j < len; j++) {
+          const otherParticle = particles[j];
           const dx = particle.x - otherParticle.x;
           const dy = particle.y - otherParticle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+          const distSq = dx * dx + dy * dy;
 
-          if (distance < 150) {
+          // Use squared distance to avoid sqrt
+          if (distSq < 12100) { // 110^2
+            const distance = Math.sqrt(distSq);
             ctx.beginPath();
             ctx.moveTo(particle.x, particle.y);
             ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `rgba(0, 212, 255, ${0.1 * (1 - distance / 150)})`;
+            ctx.strokeStyle = `rgba(0, 212, 255, ${0.08 * (1 - distance / 110)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
-        });
-
-        // Mouse interaction
-        const dx = particle.x - mouseRef.current.x;
-        const dy = particle.y - mouseRef.current.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-
-        if (distance < 100) {
-          const force = (100 - distance) / 100;
-          particle.vx += (dx / distance) * force * 0.02;
-          particle.vy += (dy / distance) * force * 0.02;
         }
-      });
+
+        // Mouse interaction (simplified)
+        const mdx = particle.x - mouseRef.current.x;
+        const mdy = particle.y - mouseRef.current.y;
+        const mDistSq = mdx * mdx + mdy * mdy;
+
+        if (mDistSq < 8100 && mDistSq > 0) { // 90^2
+          const mDist = Math.sqrt(mDistSq);
+          const force = (90 - mDist) / 90;
+          particle.vx += (mdx / mDist) * force * 0.015;
+          particle.vy += (mdy / mDist) * force * 0.015;
+        }
+      }
 
       animationFrameRef.current = requestAnimationFrame(drawParticles);
     };
@@ -98,7 +121,7 @@ export const ParticleBackground = () => {
 
     resizeCanvas();
     createParticles();
-    drawParticles();
+    animationFrameRef.current = requestAnimationFrame(drawParticles);
 
     window.addEventListener('resize', () => {
       resizeCanvas();
