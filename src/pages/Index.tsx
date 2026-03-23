@@ -50,6 +50,11 @@ const Index = () => {
       </LazySection>
       <LazySection>
         <SectionWrapper delay={0.1}>
+          <AIProjects />
+        </SectionWrapper>
+      </LazySection>
+      <LazySection>
+        <SectionWrapper delay={0.1}>
           <Certifications />
         </SectionWrapper>
       </LazySection>
