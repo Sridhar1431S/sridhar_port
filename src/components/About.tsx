@@ -46,7 +46,7 @@ export const About = () => {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16">
           {/* About Text */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}

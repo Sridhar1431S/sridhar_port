@@ -172,7 +172,7 @@ export const Projects = () => {
         {/* Projects Grid */}
         <motion.div 
           layout
-          className="grid md:grid-cols-2 gap-6 lg:gap-8"
+          className="grid sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 lg:gap-8"
         >
           {filteredProjects.map((project, index) => (
             <motion.div
