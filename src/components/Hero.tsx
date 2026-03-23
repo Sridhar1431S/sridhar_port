@@ -63,7 +63,7 @@ export const Hero = () => {
       />
 
       <div className="container-custom section-padding relative z-10">
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-20">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-8 sm:gap-12 lg:gap-20">
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
