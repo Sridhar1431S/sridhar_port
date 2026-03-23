@@ -9,6 +9,7 @@ const About = lazy(() => import('@/components/About').then(m => ({ default: m.Ab
 const Skills = lazy(() => import('@/components/Skills').then(m => ({ default: m.Skills })));
 const Experience = lazy(() => import('@/components/Experience').then(m => ({ default: m.Experience })));
 const Projects = lazy(() => import('@/components/Projects').then(m => ({ default: m.Projects })));
+const AIProjects = lazy(() => import('@/components/AIProjects').then(m => ({ default: m.AIProjects })));
 const Certifications = lazy(() => import('@/components/Certifications').then(m => ({ default: m.Certifications })));
 const Blog = lazy(() => import('@/components/Blog').then(m => ({ default: m.Blog })));
 const Testimonials = lazy(() => import('@/components/Testimonials').then(m => ({ default: m.Testimonials })));
