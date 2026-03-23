@@ -206,7 +206,7 @@ export const Hero = () => {
               />
               
               {/* Image container */}
-              <div className="relative w-64 h-64 sm:w-80 sm:h-80 lg:w-96 lg:h-96 rounded-full overflow-hidden border-4 border-primary/50">
+              <div className="relative w-48 h-48 xs:w-56 xs:h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/50">
                 <img
                   src={profileImage}
                   alt="Sridhar Reddy - Full-Stack Developer"
