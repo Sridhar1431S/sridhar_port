@@ -46,6 +46,7 @@
     
     --shadow-card: 0 4px 24px hsl(222 47% 11% / 0.08);
     --shadow-elevated: 0 12px 40px hsl(222 47% 11% / 0.12);
+    --shadow-3d: 0 6px 20px hsl(190 95% 40% / 0.3), 0 2px 6px hsl(222 47% 11% / 0.1);
 
     /* Glass effect - Light */
     --glass-bg: hsl(0 0% 100% / 0.8);
