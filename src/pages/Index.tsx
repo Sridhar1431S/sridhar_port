@@ -60,11 +60,6 @@ const Index = () => {
       </LazySection>
       <LazySection>
         <SectionWrapper delay={0.1}>
-          <Blog />
-        </SectionWrapper>
-      </LazySection>
-      <LazySection>
-        <SectionWrapper delay={0.1}>
           <Testimonials />
         </SectionWrapper>
       </LazySection>
