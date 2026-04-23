@@ -11,7 +11,7 @@ const Experience = lazy(() => import('@/components/Experience').then(m => ({ def
 const Projects = lazy(() => import('@/components/Projects').then(m => ({ default: m.Projects })));
 const AIProjects = lazy(() => import('@/components/AIProjects').then(m => ({ default: m.AIProjects })));
 const Certifications = lazy(() => import('@/components/Certifications').then(m => ({ default: m.Certifications })));
-const Blog = lazy(() => import('@/components/Blog').then(m => ({ default: m.Blog })));
+
 const Testimonials = lazy(() => import('@/components/Testimonials').then(m => ({ default: m.Testimonials })));
 const Contact = lazy(() => import('@/components/Contact').then(m => ({ default: m.Contact })));
 const Footer = lazy(() => import('@/components/Footer').then(m => ({ default: m.Footer })));
