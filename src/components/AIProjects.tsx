@@ -16,7 +16,7 @@ const aiProjects = [
     ],
     tags: ['AI', 'Computer Vision', 'React', 'ML'],
     icon: Eye,
-    link: 'https://detectraai-orcin.vercel.app/',
+    link: 'https://detectra-ai-rho.vercel.app/',
     accent: 'from-cyan-500 to-blue-600',
     accentMuted: 'from-cyan-500/10 to-blue-600/10',
     glowColor: 'shadow-cyan-500/20',
