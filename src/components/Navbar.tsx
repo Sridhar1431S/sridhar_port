@@ -93,12 +93,12 @@ export const Navbar = () => {
               <motion.button
                 key={link.name}
                 onClick={() => scrollToSection(link.href)}
-                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${
                   activeSection === link.href.slice(1)
-                    ? 'text-primary bg-primary/10'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary'
+                    ? 'text-primary bg-primary/10 shadow-md'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-secondary/80 hover:shadow-sm'
                 }`}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
                 {link.name}

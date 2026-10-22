@@ -247,7 +247,7 @@ export const Contact = () => {
                   {item.href ? (
                     <a
                       href={item.href}
-                      className="flex items-center gap-4 group glass-card rounded-xl p-4 hover:border-primary/50 transition-all duration-300"
+                      className="flex items-center gap-4 group glass-card rounded-xl p-4 hover:border-primary/60 transition-all duration-300 hover-lift"
                     >
                       <div className="p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
                         <item.icon className="w-5 h-5 text-primary" />
@@ -288,7 +288,7 @@ export const Contact = () => {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 glass-card rounded-xl hover:border-primary/50 hover:text-primary transition-all duration-300"
+                    className="p-3 glass-card rounded-xl hover:border-primary/60 hover:text-primary transition-all duration-300 hover:scale-110 hover:shadow-lg"
                   >
                     <link.icon className="w-5 h-5" />
                   </a>
@@ -303,7 +303,7 @@ export const Contact = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 lg:p-8 space-y-6">
+            <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 lg:p-8 space-y-6 hover-lift">
               {/* Honeypot field - hidden from users, bots will fill it */}
               <div className="absolute -left-[9999px]" aria-hidden="true">
                 <label htmlFor="website">Website</label>

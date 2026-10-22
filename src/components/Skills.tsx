@@ -47,37 +47,37 @@ const skillCategories = [
     title: 'Programming Languages',
     icon: Code2,
     skills: ['Python', 'JavaScript', 'TypeScript', 'Java', 'SQL'],
-    color: 'from-cyan-500 to-blue-500',
+    color: 'from-slate-600 via-blue-700 to-slate-800',
   },
   {
     title: 'AI & Machine Learning',
     icon: Brain,
     skills: ['NLP', 'PyTorch', 'TensorFlow', 'LangChain', 'OpenAI API', 'Prompt Engineering'],
-    color: 'from-purple-500 to-pink-500',
+    color: 'from-indigo-600 via-violet-700 to-slate-700',
   },
   {
     title: 'Web Development',
     icon: Globe,
     skills: ['React.js', 'Django', 'Flask', 'REST APIs', 'HTML/CSS', 'Flutter'],
-    color: 'from-green-500 to-teal-500',
+    color: 'from-blue-600 via-cyan-700 to-slate-700',
   },
   {
     title: 'Databases',
     icon: Database,
     skills: ['MySQL', 'MongoDB', 'PostgreSQL'],
-    color: 'from-orange-500 to-red-500',
+    color: 'from-slate-600 via-gray-700 to-zinc-800',
   },
   {
     title: 'Tools & Frameworks',
     icon: Wrench,
     skills: ['VS Code', 'Jupyter', 'Power BI', 'Git/GitHub'],
-    color: 'from-yellow-500 to-orange-500',
+    color: 'from-stone-600 via-neutral-700 to-slate-800',
   },
   {
     title: 'Core Competencies',
     icon: Cpu,
     skills: ['Agent Workflow Design', 'Automation Systems', 'Data Pipelines', 'AI Agent Integration'],
-    color: 'from-indigo-500 to-purple-500',
+    color: 'from-blue-700 via-indigo-800 to-slate-900',
   },
 ];
 
@@ -111,22 +111,23 @@ export const Skills = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group glass-card rounded-2xl p-6 hover:border-primary/50 transition-all duration-300"
+              whileHover={{ y: -8, scale: 1.02 }}
+              className="group glass-card rounded-2xl p-6 hover:border-primary/60 transition-all duration-300 hover-lift"
             >
-              {/* Icon */}
-              <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${category.color} mb-4`}>
+              {/* Icon with gradient background */}
+              <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${category.color} mb-4 shadow-lg group-hover:shadow-xl transition-shadow duration-300`}>
                 <category.icon className="w-6 h-6 text-white" />
               </div>
 
               {/* Title */}
-              <h3 className="font-display text-xl font-semibold mb-4">{category.title}</h3>
+              <h3 className="font-display text-xl font-semibold mb-4 group-hover:text-primary transition-colors duration-300">{category.title}</h3>
 
               {/* Skills Tags with Icons */}
               <div className="flex flex-wrap gap-2">
                 {category.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm bg-background/50 rounded-lg border border-border hover:border-primary/50 hover:text-primary transition-colors cursor-default"
+                    className="inline-flex items-center gap-2 px-3 py-1.5 text-sm bg-background/60 rounded-lg border border-border hover:border-primary/60 hover:text-primary hover:bg-primary/10 transition-all duration-300 cursor-default"
                   >
                     {skillIcons[skill] && (
                       <img 

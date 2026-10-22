@@ -72,14 +72,17 @@ export const Experience = () => {
 
               {/* Content */}
               <div className={`flex-1 ml-8 md:ml-0 ${index % 2 === 0 ? 'md:pr-12' : 'md:pl-12'}`}>
-                <div className="glass-card rounded-2xl p-6 hover:border-primary/50 transition-all duration-300">
+                <motion.div
+                  whileHover={{ y: -8, scale: 1.02 }}
+                  className="glass-card rounded-2xl p-6 hover:border-primary/60 transition-all duration-300 hover-lift"
+                >
                   {/* Header */}
                   <div className="flex items-start justify-between gap-4 mb-4">
                     <div>
                       <h3 className="font-display text-xl font-semibold">{exp.title}</h3>
                       <p className="text-primary font-medium">{exp.company}</p>
                     </div>
-                    <div className="p-2 rounded-lg bg-primary/10">
+                    <div className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors">
                       <Briefcase className="w-5 h-5 text-primary" />
                     </div>
                   </div>
@@ -100,7 +103,7 @@ export const Experience = () => {
                   <ul className="space-y-2 mb-4">
                     {exp.description.map((item, i) => (
                       <li key={i} className="flex items-start gap-2 text-muted-foreground">
-                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-primary mt-2 flex-shrink-0 hover:scale-125 transition-transform duration-300" />
                         {item}
                       </li>
                     ))}
@@ -111,13 +114,13 @@ export const Experience = () => {
                     {exp.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="px-2.5 py-1 text-xs bg-primary/10 text-primary rounded-full"
+                        className="px-2.5 py-1 text-xs bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors"
                       >
                         {tech}
                       </span>
                     ))}
                   </div>
-                </div>
+                </motion.div>
               </div>
 
               {/* Spacer for alternating layout */}

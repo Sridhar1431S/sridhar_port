@@ -36,27 +36,39 @@ export const Hero = () => {
       
       {/* Animated gradient orbs */}
       <motion.div
-        className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
+        className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-primary/25 rounded-full blur-3xl"
         animate={{
-          x: [0, 50, 0],
-          y: [0, 30, 0],
-          scale: [1, 1.1, 1],
+          x: [0, 60, 0],
+          y: [0, 40, 0],
+          scale: [1, 1.15, 1],
         }}
         transition={{
-          duration: 8,
+          duration: 10,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
       />
       <motion.div
-        className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-accent/10 rounded-full blur-3xl"
+        className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-accent/15 rounded-full blur-3xl"
         animate={{
-          x: [0, -40, 0],
-          y: [0, -20, 0],
-          scale: [1, 1.2, 1],
+          x: [0, -50, 0],
+          y: [0, -30, 0],
+          scale: [1, 1.25, 1],
         }}
         transition={{
-          duration: 10,
+          duration: 12,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+      <motion.div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-3xl"
+        animate={{
+          scale: [1, 1.3, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 15,
           repeat: Infinity,
           ease: 'easeInOut',
         }}
@@ -196,17 +208,24 @@ export const Hero = () => {
           >
             <div className="relative">
               {/* Glow effect */}
-              <div className="absolute inset-0 rounded-full bg-primary/30 blur-2xl animate-pulse-glow" />
+              <div className="absolute inset-0 rounded-full bg-primary/35 blur-3xl animate-pulse-glow" />
               
-              {/* Rotating border */}
+              {/* Rotating gradient border */}
               <motion.div
-                className="absolute -inset-2 rounded-full border-2 border-dashed border-primary/30"
+                className="absolute -inset-3 rounded-full bg-gradient-to-r from-primary via-accent to-primary opacity-60 blur-md"
                 animate={{ rotate: 360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+              />
+              
+              {/* Inner rotating dashed border */}
+              <motion.div
+                className="absolute -inset-2 rounded-full border-2 border-dashed border-primary/40"
+                animate={{ rotate: -360 }}
                 transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
               />
               
               {/* Image container */}
-              <div className="relative w-48 h-48 xs:w-56 xs:h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/50">
+              <div className="relative w-48 h-48 xs:w-56 xs:h-56 sm:w-72 sm:h-72 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden border-4 border-primary/60 shadow-2xl">
                 <img
                   src={profileImage}
                   alt="Sridhar Reddy - Full-Stack Developer"

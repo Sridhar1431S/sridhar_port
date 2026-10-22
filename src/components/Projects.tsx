@@ -20,8 +20,8 @@ const projects = [
       'Voice interaction',
     ],
     technologies: ['OpenAI API', 'Supabase', 'React.js', 'NLP'],
-    color: 'from-green-500/20 to-emerald-500/20',
-    borderColor: 'hover:border-green-500/50',
+    color: 'from-slate-600 via-blue-700 to-slate-800',
+    borderColor: 'hover:border-slate-500/60',
     category: ['AI', 'Hackathon'] as Category[],
     link: 'https://agri-grow-nine.vercel.app/',
   },
@@ -39,8 +39,8 @@ const projects = [
       'Recruiter dashboard',
     ],
     technologies: ['LangChain', 'Pinecone', 'FAISS', 'Streamlit', 'LLMs'],
-    color: 'from-blue-500/20 to-cyan-500/20',
-    borderColor: 'hover:border-blue-500/50',
+    color: 'from-blue-700 via-indigo-800 to-slate-900',
+    borderColor: 'hover:border-blue-600/60',
     category: ['AI'] as Category[],
     link: 'https://cv-infinity-boost-ai.vercel.app/',
   },
@@ -58,8 +58,8 @@ const projects = [
       'Health insights',
     ],
     technologies: ['React.js', 'AI/ML', 'Supabase', 'Tailwind CSS'],
-    color: 'from-emerald-500/20 to-teal-500/20',
-    borderColor: 'hover:border-emerald-500/50',
+    color: 'from-cyan-700 via-blue-800 to-slate-900',
+    borderColor: 'hover:border-cyan-600/60',
     category: ['AI', 'Web'] as Category[],
     link: 'https://fit-infinity-fuel-ai.vercel.app/',
   },
@@ -77,8 +77,8 @@ const projects = [
       'Interactive maps',
     ],
     technologies: ['React.js', 'REST APIs', 'Maps API', 'Tailwind CSS'],
-    color: 'from-amber-500/20 to-orange-500/20',
-    borderColor: 'hover:border-amber-500/50',
+    color: 'from-stone-600 via-neutral-700 to-slate-800',
+    borderColor: 'hover:border-stone-500/60',
     category: ['Web'] as Category[],
     link: 'https://pet-friendly-city-hub.vercel.app/',
   },
@@ -96,8 +96,8 @@ const projects = [
       'User engagement tracking',
     ],
     technologies: ['Django', 'React.js', 'REST APIs', 'NLP', 'PostgreSQL'],
-    color: 'from-purple-500/20 to-pink-500/20',
-    borderColor: 'hover:border-purple-500/50',
+    color: 'from-indigo-700 via-violet-800 to-slate-900',
+    borderColor: 'hover:border-indigo-600/60',
     category: ['Web', 'AI'] as Category[],
     link: 'https://digital-literacy-virid.vercel.app/',
   },
@@ -115,8 +115,8 @@ const projects = [
       'Cost optimization',
     ],
     technologies: ['Django', 'NLP', 'RESTful APIs', 'JavaScript', 'PostgreSQL'],
-    color: 'from-orange-500/20 to-red-500/20',
-    borderColor: 'hover:border-orange-500/50',
+    color: 'from-gray-700 via-slate-800 to-zinc-900',
+    borderColor: 'hover:border-gray-600/60',
     category: ['Web', 'Hackathon'] as Category[],
   },
 ];
@@ -157,10 +157,10 @@ export const Projects = () => {
                 onClick={() => setActiveCategory(category)}
                 className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
                   activeCategory === category
-                    ? 'bg-primary text-primary-foreground shadow-lg'
-                    : 'bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80'
+                    ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
+                    : 'bg-secondary text-muted-foreground hover:text-foreground hover:bg-secondary/80 hover:shadow-md'
                 }`}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.08, y: -2 }}
                 whileTap={{ scale: 0.95 }}
               >
                 {category}
@@ -182,21 +182,22 @@ export const Projects = () => {
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3, delay: index * 0.05 }}
-              className={`group glass-card rounded-2xl overflow-hidden ${project.borderColor} transition-all duration-300`}
+              whileHover={{ y: -8, scale: 1.02 }}
+              className={`group glass-card rounded-2xl overflow-hidden ${project.borderColor} transition-all duration-300 hover-lift`}
             >
               {/* Gradient Header */}
-              <div className={`h-2 bg-gradient-to-r ${project.color.replace('/20', '')}`} />
+              <div className={`h-2 bg-gradient-to-r ${project.color} opacity-80`} />
 
               <div className="p-6 lg:p-8">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div>
-                    <h3 className="font-display text-xl lg:text-2xl font-semibold mb-1">
+                    <h3 className="font-display text-xl lg:text-2xl font-semibold mb-1 group-hover:text-primary transition-colors duration-300">
                       {project.title}
                     </h3>
                     <p className="text-primary text-sm font-medium">{project.subtitle}</p>
                   </div>
-                  <div className={`p-2 rounded-lg bg-gradient-to-br ${project.color}`}>
+                  <div className={`p-2 rounded-lg bg-gradient-to-br ${project.color} bg-opacity-20 group-hover:scale-110 transition-transform duration-300`}>
                     <Sparkles className="w-5 h-5 text-primary" />
                   </div>
                 </div>
@@ -214,7 +215,7 @@ export const Projects = () => {
                 <div className="space-y-2 mb-6">
                   {project.features.slice(0, 3).map((feature, i) => (
                     <div key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <span className="w-1.5 h-1.5 rounded-full bg-primary" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-primary group-hover:scale-125 transition-transform duration-300" />
                       {feature}
                     </div>
                   ))}
@@ -225,7 +226,7 @@ export const Projects = () => {
                   {project.technologies.map((tech) => (
                     <span
                       key={tech}
-                      className="px-3 py-1 text-xs bg-background/50 border border-border rounded-full"
+                      className="px-3 py-1 text-xs bg-background/60 border border-border rounded-full hover:border-primary/60 hover:text-primary hover:bg-primary/10 transition-all duration-300"
                     >
                       {tech}
                     </span>
@@ -238,7 +239,7 @@ export const Projects = () => {
                     href={project.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-sm text-primary hover:underline transition-colors"
+                    className="inline-flex items-center gap-2 text-sm text-primary hover:underline transition-colors group-hover:gap-3 duration-300"
                   >
                     <ExternalLink className="w-4 h-4" />
                     View Live Project

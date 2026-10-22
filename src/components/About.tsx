@@ -54,19 +54,19 @@ export const About = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="space-y-6"
           >
-            <div className="glass-card rounded-2xl p-6 lg:p-8">
+            <div className="glass-card rounded-2xl p-6 lg:p-8 hover-lift">
               <p className="text-lg leading-relaxed text-muted-foreground">
-                I'm an innovative and versatile <span className="text-foreground font-medium">B.Tech Computer Science student</span> seeking 
+                I'm an innovative and versatile <span className="text-foreground font-medium">B.Tech Computer Science student</span> seeking
                 entry-level roles as an <span className="text-primary font-medium">Agentic Software Engineer</span> and{' '}
                 <span className="text-primary font-medium">Full-Stack Developer</span>.
               </p>
               <p className="text-lg leading-relaxed text-muted-foreground mt-4">
-                Proficient in <span className="text-foreground">Python, JavaScript, Machine Learning, NLP</span>, and modern 
-                web frameworks including React.js, Django, and Flask. Strong foundation in algorithms, data pipelines, 
+                Proficient in <span className="text-foreground">Python, JavaScript, Machine Learning, NLP</span>, and modern
+                web frameworks including React.js, Django, and Flask. Strong foundation in algorithms, data pipelines,
                 software development, and responsive web design.
               </p>
               <p className="text-lg leading-relaxed text-muted-foreground mt-4">
-                Eager to contribute to building <span className="text-primary font-medium">autonomous AI systems</span> and 
+                Eager to contribute to building <span className="text-primary font-medium">autonomous AI systems</span> and
                 robust web applications while continuously learning and growing in a dynamic environment.
               </p>
             </div>
@@ -83,7 +83,8 @@ export const About = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                  className="glass-card rounded-xl p-4 text-center"
+                  whileHover={{ y: -8, scale: 1.05 }}
+                  className="glass-card rounded-xl p-4 text-center hover-lift cursor-default"
                 >
                   <p className="font-display text-3xl font-bold gradient-text">{stat.value}</p>
                   <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
@@ -113,7 +114,8 @@ export const About = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={isInView ? { opacity: 1, y: 0 } : {}}
                   transition={{ duration: 0.4, delay: 0.4 + index * 0.1 }}
-                  className="glass-card rounded-xl p-5 hover:border-primary/50 transition-colors"
+                  whileHover={{ x: 8 }}
+                  className="glass-card rounded-xl p-5 hover:border-primary/60 transition-all duration-300 hover-lift"
                 >
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
