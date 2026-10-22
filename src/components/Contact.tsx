@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from '@/hooks/use-toast';
-import { supabase } from '@/integrations/supabase/client';
 import { z } from 'zod';
 
 // Turnstile type declarations
@@ -89,7 +88,7 @@ export const Contact = () => {
           sitekey: TURNSTILE_SITE_KEY,
           callback: (token: string) => setTurnstileToken(token),
           'expired-callback': () => setTurnstileToken(null),
-          theme: 'dark',
+          theme: 'auto',
         });
         setTurnstileWidgetId(widgetId);
       }
@@ -107,7 +106,7 @@ export const Contact = () => {
           sitekey: TURNSTILE_SITE_KEY,
           callback: (token: string) => setTurnstileToken(token),
           'expired-callback': () => setTurnstileToken(null),
-          theme: 'dark',
+          theme: 'auto',
         });
         setTurnstileWidgetId(widgetId);
       }
@@ -133,9 +132,9 @@ export const Contact = () => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrors({});
-    
+
     const formData = new FormData(e.currentTarget);
-    
+
     // Check honeypot field - if filled, it's likely a bot
     const honeypot = formData.get('website') as string;
     if (honeypot) {
@@ -147,7 +146,7 @@ export const Contact = () => {
       });
       return;
     }
-    
+
     const formValues = {
       name: formData.get('name') as string,
       email: formData.get('email') as string,
@@ -155,15 +154,9 @@ export const Contact = () => {
       message: formData.get('message') as string,
     };
 
-    // Check Turnstile token
+    // Check Turnstile token (optional for now)
     if (!turnstileToken) {
-      setIsSubmitting(false);
-      toast({
-        title: 'Verification Required',
-        description: 'Please complete the security verification.',
-        variant: 'destructive',
-      });
-      return;
+      console.log('Turnstile token not available, proceeding without it');
     }
 
     // Client-side validation
@@ -186,22 +179,24 @@ export const Contact = () => {
     }
 
     try {
-      const { data, error } = await supabase.functions.invoke('send-contact-email', {
-        body: { ...validation.data, turnstileToken },
-      });
+      // Use mailto link as fallback since Edge Function is not configured
+      const mailtoLink = `mailto:sridhar709398@gmail.com?subject=${encodeURIComponent(validation.data.subject)}&body=${encodeURIComponent(
+        `Name: ${validation.data.name}\nEmail: ${validation.data.email}\n\nMessage:\n${validation.data.message}`
+      )}`;
 
-      if (error) throw error;
+      // Open email client
+      window.location.href = mailtoLink;
 
       toast({
-        title: 'Message sent!',
-        description: 'Thank you for reaching out. I\'ll get back to you soon.',
+        title: 'Opening email client...',
+        description: 'Please send the message from your email client.',
       });
-      
+
       (e.target as HTMLFormElement).reset();
       resetTurnstile();
     } catch (error: any) {
       toast({
-        title: 'Error sending message',
+        title: 'Error',
         description: error.message || 'Please try again or contact me directly via email.',
         variant: 'destructive',
       });
@@ -247,7 +242,7 @@ export const Contact = () => {
                   {item.href ? (
                     <a
                       href={item.href}
-                      className="flex items-center gap-4 group glass-card rounded-xl p-4 hover:border-primary/60 transition-all duration-300 hover-lift"
+                      className="flex items-center gap-4 group bg-card border border-border rounded-xl p-4 hover:border-primary/60 transition-all duration-300 hover:shadow-md"
                     >
                       <div className="p-3 rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
                         <item.icon className="w-5 h-5 text-primary" />
@@ -260,7 +255,7 @@ export const Contact = () => {
                       </div>
                     </a>
                   ) : (
-                    <div className="flex items-center gap-4 glass-card rounded-xl p-4">
+                    <div className="flex items-center gap-4 bg-card border border-border rounded-xl p-4">
                       <div className="p-3 rounded-lg bg-primary/10">
                         <item.icon className="w-5 h-5 text-primary" />
                       </div>
@@ -288,7 +283,7 @@ export const Contact = () => {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-3 glass-card rounded-xl hover:border-primary/60 hover:text-primary transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                    className="p-3 bg-card border border-border rounded-xl hover:border-primary/60 hover:text-primary transition-all duration-300 hover:scale-110 hover:shadow-md"
                   >
                     <link.icon className="w-5 h-5" />
                   </a>
@@ -303,7 +298,7 @@ export const Contact = () => {
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <form onSubmit={handleSubmit} className="glass-card rounded-2xl p-6 lg:p-8 space-y-6 hover-lift">
+            <form onSubmit={handleSubmit} className="bg-card border border-border rounded-2xl p-6 lg:p-8 space-y-6 shadow-lg">
               {/* Honeypot field - hidden from users, bots will fill it */}
               <div className="absolute -left-[9999px]" aria-hidden="true">
                 <label htmlFor="website">Website</label>
@@ -384,7 +379,7 @@ export const Contact = () => {
                 <div ref={turnstileRef} />
               </div>
 
-              <Button type="submit" size="lg" className="w-full gap-2" disabled={isSubmitting || !turnstileToken}>
+              <Button type="submit" size="lg" className="w-full gap-2" disabled={isSubmitting}>
                 {isSubmitting ? (
                   <>Sending...</>
                 ) : (
